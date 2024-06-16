@@ -373,7 +373,7 @@ defines.hitboxes_by_hitgroup = function (hitgroup) {
     hitgroups[7] = [8, 10, 12]
 
     if (hitgroups[hitgroup] == undefined) {
-        return
+        return undefined
     }
 
     return hitgroups[hitgroup]
@@ -1384,7 +1384,7 @@ menu.render = function () {
 
     for (name in menu.colors.themes[menu.colors.current_theme]) {
         COLORS[name] = defines.alpha_multiply(
-            visuals.new_animation('color theme' + name, menu.colors.themes[menu.colors.current_theme][name], undefined, 0.5), //эт по сути тоже хавать должно дохуя //ахах да тут все жрет сукааа
+            visuals.new_animation('color theme' + name, menu.colors.themes[menu.colors.current_theme][name], undefined, 0.5), //ахах да тут все жрет сукааа
             menu_alpha
         )
     }
@@ -1524,7 +1524,7 @@ menu.render = function () {
         var IS_SOMETHING_OPEN = function () {
             return DROPDOWNS.length > 0 || COLORPICKERS.length > 0 || KEYBIND_TYPE_SELECTORS.length > 0 //эт чтобы низзя было нажимать на элементы, которые находятся за хуйнюшкой какой то (например колорпикер открытый или дропдаун)
         }
-
+        
         for (subtab in objTab.items) {
 
             //subtab zone
@@ -1570,6 +1570,7 @@ menu.render = function () {
 
 
             //где то читал что с этими for in циклами дохуя хавается
+
             for (item in objSubtab.items) {
 
                 var objItem = objSubtab.items[item]
@@ -1699,12 +1700,12 @@ menu.render = function () {
                     
                     if (defines.in_bounds(input.held_cursor(), [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + SLIDER_NAME_INDENT], SLIDER_BOX_SIZE) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
                         if (input.pressed(0x25)) {
-                            objItem.value = objItem.value - 1
+                            objItem.value--
                             objItem.hint_timer = CURTIME
                         }
 
                         if (input.pressed(0x27)) {
-                            objItem.value = objItem.value + 1
+                            objItem.value++
                             objItem.hint_timer = CURTIME
                         }
 
@@ -1823,7 +1824,7 @@ menu.render = function () {
                                 }
                             }
 
-                            OPTIONS_OFFSET = OPTIONS_OFFSET + DROPDOWN_BOX_SIZE[1]
+                            OPTIONS_OFFSET += DROPDOWN_BOX_SIZE[1]
                         }
                     
                         if (input.pressed(0x01) && ITEM_INTERACTION_PERMISSION) {
@@ -1891,7 +1892,6 @@ menu.render = function () {
                     var amount = 0
                     var new_values = ''
                     new_values = amount == 0 ? 'None' : new_values
-                    
 
                     //опять спасибо klient, у него спиздил
 
@@ -1904,7 +1904,7 @@ menu.render = function () {
                             new_values = new_values + objItem.options[index]
                             new_values = new_values.replace('None', '')
 
-                            amount = amount + 1
+                            amount++
                         }
                     }
 
@@ -2235,12 +2235,14 @@ menu.render = function () {
 
                         for (i = 1; i < 255; i++) {
                             if (input.pressed(i) && ignored_keys.indexOf(defines.key_names[i]) == -1) {
+                                objItem.value = false
                                 objItem.key = i
                                 objItem.listening = false
                             }
                         }
 
                         if (input.pressed(remove_keybind_key_code)) {
+                            objItem.value = false
                             objItem.key = undefined
                             objItem.listening = false
                         }
@@ -2273,12 +2275,13 @@ menu.render = function () {
 
                             if (input.pressed(0x01) && ITEM_INTERACTION_PERMISSION && KEYBIND_ANIM) {
                                 if (defines.in_bounds(input.cursor(), [KEYBIND_MODE_WINDOW_TABLE.POSITION[0], KEYBIND_MODE_WINDOW_TABLE.POSITION[1] + OPTIONS_OFFSET], KEYBIND_MODE_WINDOW_SIZE)) {
+                                    objItem.value = false
                                     objItem.mode = m
                                     objItem.is_visible = false
                                 }
                             }
 
-                            OPTIONS_OFFSET = OPTIONS_OFFSET + KEYBIND_MODE_WINDOW_SIZE[1]
+                            OPTIONS_OFFSET += KEYBIND_MODE_WINDOW_SIZE[1]
                         }
 
                         if (input.pressed(0x01) && ITEM_INTERACTION_PERMISSION) {
@@ -2291,16 +2294,16 @@ menu.render = function () {
 
                     }
                     
-                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] = SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] + KEYBIND_ITEM_INDENT * ITEM_ALPHA
+                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] += KEYBIND_ITEM_INDENT * ITEM_ALPHA
                     
                 }
             }
             
             menu.subtab_offsets[TAB_NAME][SUBTAB_NAME] = SUBTAB_ITEMS_OFFSET[SUBTAB_NAME]
-            SUBTABS_OFFSET = SUBTABS_OFFSET + SUBTAB_SIZE_W + SUBTAB_INDENT
+            SUBTABS_OFFSET += SUBTAB_SIZE_W + SUBTAB_INDENT
         }
 
-        TAB_OFFSET = TAB_OFFSET + TAB_NAME_SIZE[0] + HEADER_PER_TAB_NAME_INDENT
+        TAB_OFFSET += TAB_NAME_SIZE[0] + HEADER_PER_TAB_NAME_INDENT
     }
     
     for (DROPDOWN_ID in DROPDOWNS) {
@@ -2345,7 +2348,7 @@ menu.render = function () {
                     DROPDOWN_PREVIEW_FONT)
             }
 
-            OPTIONS_OFFSET = OPTIONS_OFFSET + DROPDOWN_BOX_SIZE[1] * DROPDOWN.ANIM
+            OPTIONS_OFFSET += DROPDOWN_BOX_SIZE[1] * DROPDOWN.ANIM
         }
 
         var DROPDOWN_OUTLINE_COLOR = defines.alpha_override(COLORS.DROPDOWN_OUTLINE, DROPDOWN.ANIM)
@@ -2502,7 +2505,7 @@ menu.render = function () {
                 MODE_COLOR,
                 KEYBINDS_KEY_PREVIEW_FONT)
 
-            OPTIONS_OFFSET = OPTIONS_OFFSET + KEYBIND_MODE_WINDOW_SIZE[1] * KEYBIND.ANIM
+            OPTIONS_OFFSET += KEYBIND_MODE_WINDOW_SIZE[1] * KEYBIND.ANIM
         }
 
         render.Rect(KEYBIND.POSITION[0],
@@ -2593,16 +2596,14 @@ menu.handle_keybinds = function () {
                 if (objItem.type == 'keybind') {
                     if (objItem.mode == 2) {
                         objItem.value = true
-                    } else {
-                        if (objItem.key != undefined) {
-                            if (objItem.mode == 0) {
-                                objItem.value = input.held(objItem.key)
-                            } else if (objItem.mode == 1) {
-                                if (input.pressed(objItem.key)) {
-                                    objItem.value = !objItem.value
-                                }
+                    } else if (objItem.key != undefined) {
+                        if (objItem.mode == 0) {
+                            objItem.value = input.held(objItem.key)
+                        } else if (objItem.mode == 1) {
+                            if (input.pressed(objItem.key)) {
+                                objItem.value = !objItem.value
                             }
-                        }
+                        } 
                     }
                 }
             }
@@ -2672,14 +2673,15 @@ configs.save = function () {
                 }
 
                 var current_item_key = [objTab.name, objSubtab.name, objItem.name].join('|')
-                var value = menu.get_value(objTab.name, objSubtab.name, objItem.name)
+
+                var value = objItem.value
+
                 var string_value = undefined
                 
                 if (objItem.type == 'checkbox') {
                     var string_value = value.toString()
                     //"true"
                 } else if (objItem.type == 'slider') {
-                    Cheat.Print(objItem.name + ' | ' + value.toString() + ' SAVE\n')
                     var string_value = value.toString()
                     //"52"
                 } else if (objItem.type == 'dropdown') {
@@ -2697,8 +2699,7 @@ configs.save = function () {
                     ].join(',') // -> e.g "0, 1"
                 }
 
-                if (string_value != undefined) {
-                    //Cheat.Print(current_item_key.toString() + ' | ' + string_value.toString() + ' | ' + typeof(string_value) + '\n')
+                if (string_value != undefined && !objItem.skip_config) {
                     DataFile.SetKey(current_name, current_item_key, string_value)
                 }
             }
@@ -2755,7 +2756,6 @@ configs.load = function () {
                 if (objItem.type == 'checkbox') {
                     new_value = string_value === 'true'
                 } else if (objItem.type == 'slider') {
-                    Cheat.Print(objItem.name + ' | ' + string_value + ' LOAD\n')
                     new_value = Number(string_value)
                 } else if (objItem.type == 'dropdown') {
                     new_value = Number(string_value)
@@ -2786,7 +2786,7 @@ configs.load = function () {
                     menu.set_keybind(objTab.name, objSubtab.name, objItem.name, Number(keybind_value[0]), Number(keybind_value[1]))
                 }
 
-                if (new_value != undefined) {
+                if (new_value != undefined && !objItem.skip_config) {
                     menu.set_value(objTab.name, objSubtab.name, objItem.name, new_value)
                 }
             }
@@ -3198,6 +3198,18 @@ anti_aims.x_way.remove_way = function (name) {
     menu.set_value('Anti Aim', 'Builder', 'XWAY' + name, anti_aims.x_way.menu_elements[name].length)
 }
 
+anti_aims.right_direction_path = ["Rage", "Anti Aim", "General", "Key assignment", "Right direction"]
+anti_aims.left_direction_path = ["Rage", "Anti Aim", "General", "Key assignment", "Left direction"]
+anti_aims.back_direction_path = ["Rage", "Anti Aim", "General", "Key assignment", "Back direction"]
+
+anti_aims.is_manual_aa = function () {
+    var is_right = UI.GetValue(anti_aims.right_direction_path)
+    var is_left = UI.GetValue(anti_aims.left_direction_path)
+    var is_back = UI.GetValue(anti_aims.back_direction_path)
+
+    return (is_right || is_left || is_back)
+}
+
 anti_aims.new_condition = function (name, fn) {
     var id = anti_aims.conditions.length
 
@@ -3232,6 +3244,10 @@ anti_aims.new_condition = function (name, fn) {
 
     current_condition.fake_limit_jitter = menu.add_checkbox('Anti Aim', 'Builder', 'Jitter' + id_n, false, function () {
         return show_condition() && current_condition.fake_limit_type.value != 0
+    })
+
+    current_condition.ignore_on_manual_aa = menu.add_checkbox('Anti Aim', 'Builder', 'Ignore on manual AA' + id_n, false, function () {
+        return show_condition() && current_condition.fake_limit_type.value != 0 && current_condition.fake_limit_jitter.value
     })
 
     current_condition.fake_limit_common = menu.add_slider('Anti Aim', 'Builder', 'Common limit' + id_n, 25, 0, 60, function () {
@@ -3287,7 +3303,6 @@ anti_aims.new_condition = function (name, fn) {
 
     current_condition.x_way_hidden = menu.add_slider('Anti Aim', 'Builder', 'XWAY' + name, 3, 3, 6, function () {return false})
 
-
     current_condition.x_way_add = menu.add_button('Anti Aim', 'Builder', 'Add way' + id_n, function () {
         anti_aims.x_way.add_way(name)
     }, function () {
@@ -3310,11 +3325,29 @@ anti_aims.new_condition = function (name, fn) {
     }
 }
 
+anti_aims.yaw_value_cache = UI.GetValue(anti_aims.yaw_path)
+
+anti_aims.reset_on_unload = function () {
+    UI.SetValue(anti_aims.yaw_path, anti_aims.yaw_value_cache)
+    AntiAim.SetOverride(0)
+}
+
 anti_aims.variables = []
 
 anti_aims.apply_condition = function (name) {
+    var override = false
 
-    AntiAim.SetOverride(1)
+    if (name == 'Shared') {
+        override = menu.get_value('Anti Aim', 'Main', 'Enable')
+    } else {
+        override = menu.get_value('Anti Aim', 'Main', 'Enable') && menu.get_value('Anti Aim', 'Builder', 'Override ' + name.toLowerCase())
+    }
+
+    AntiAim.SetOverride(override ? 1 : 0)
+
+    if (!override) {
+        return
+    }
 
     var id = anti_aims.condition_list.indexOf(name)
     var id_n = (' ').repeat(id + 1)
@@ -3340,9 +3373,12 @@ anti_aims.apply_condition = function (name) {
 
     if (fake_limit_type != 0) {
         var jitter = menu.get_value('Anti Aim', 'Builder', 'Jitter' + id_n)
+        var ignore_on_manual_aa = menu.get_value('Anti Aim', 'Builder', 'Ignore on manual AA' + id_n)
+
+        var is_manual_aa = anti_aims.is_manual_aa()
         var inverter = UI.GetValue(anti_aims.inverter_path) == 1
 
-        if (jitter) {
+        if (jitter && !(ignore_on_manual_aa && is_manual_aa)) {
             anti_aims.variables[name].inverter = anti_aims.variables[name].jitter
         } else {
             anti_aims.variables[name].inverter = inverter
@@ -3381,7 +3417,7 @@ anti_aims.apply_condition = function (name) {
         if (yaw_add_type[0]) {
             var yaw_add = menu.get_value('Anti Aim', 'Builder', 'Yaw add' + id_n)
 
-            yaw_to_override = yaw_to_override + yaw_add
+            yaw_to_override += yaw_add
         }
 
         if (yaw_add_type[1]) {
@@ -3392,7 +3428,7 @@ anti_aims.apply_condition = function (name) {
 
             var yaw_add = inverter ? yaw_add_left : yaw_add_right
 
-            yaw_to_override = yaw_to_override + yaw_add
+            yaw_to_override += yaw_add
         }
 
         if (yaw_add_type[2]) {
@@ -3411,7 +3447,7 @@ anti_aims.apply_condition = function (name) {
                 yaw_add = inverter ? -modifier_degree / 2 : modifier_degree / 2
             }
 
-            yaw_to_override = yaw_to_override + yaw_add
+            yaw_to_override += yaw_add
         }
 
     } else if (yaw_mode == 1) {
@@ -3421,7 +3457,7 @@ anti_aims.apply_condition = function (name) {
         var packets = anti_aims.packets
         var current_way = menu_elements[packets % ways]
 
-        yaw_to_override = yaw_to_override + menu.get_value(current_way.tab, current_way.subtab, current_way.name)
+        yaw_to_override += menu.get_value(current_way.tab, current_way.subtab, current_way.name)
         
     } else if (yaw_mode == 2) {
         var yaw_right = menu.get_value('Anti Aim', 'Builder', 'Yaw right' + id_n)
@@ -3445,7 +3481,7 @@ anti_aims.apply_condition = function (name) {
             yaw_add = yaw_right
         }
 
-        yaw_to_override = yaw_to_override + yaw_add
+        yaw_to_override += yaw_add
     }
 
     var ignore_yaw_settings = menu.get_value('Anti Aim', 'Main', 'Ignore yaw settings')
@@ -3456,7 +3492,7 @@ anti_aims.apply_condition = function (name) {
             if (ignore_yaw_settings) {
                 yaw_to_override = anti_aims.edge_yaw.yaw
             } else {
-                yaw_to_override = yaw_to_override + anti_aims.edge_yaw.yaw
+                yaw_to_override += anti_aims.edge_yaw.yaw
             }
         }
     }
@@ -3539,7 +3575,7 @@ anti_aims.new_condition('Slow walk', function(key, flags, localplayer) {
 
     var on_ground = bit.band(flags, FL_ONGROUND) != 0
 
-    return on_ground && UI.GetValue(anti_aims.slow_walk_path) == 1 && (UserCMD.GetMovement()[0] != 0 || UserCMD.GetMovement()[1] != 0)
+    return on_ground && UI.GetValue(anti_aims.slow_walk_path) == 1 && (UserCMD.GetMovement()[0] != 0 || UserCMD.GetMovement()[1] != 0) && !Input.IsKeyPressed(0x20)
 })
 
 
@@ -3600,7 +3636,7 @@ anti_aims.update_player_condition = function () {
         anti_aims.current_state = 'Crouching'
     }
 
-    if (on_ground && UI.GetValue(anti_aims.slow_walk_path) == 1 && (UserCMD.GetMovement()[0] != 0 || UserCMD.GetMovement()[1] != 0)) {
+    if (on_ground && UI.GetValue(anti_aims.slow_walk_path) == 1 && (UserCMD.GetMovement()[0] != 0 || UserCMD.GetMovement()[1] != 0) && !Input.IsKeyPressed(0x20)) {
         anti_aims.current_state = 'Slow walk'
     }
 
@@ -3629,8 +3665,6 @@ menu.add_keybind('Anti Aim', 'Main', 'Key ', function () {
 var freestanding = {}
 */
 
-
-
 menu.add_subtab('Visuals', 'Main')
 
 menu.add_checkbox('Visuals', 'Main', 'Enable', false)
@@ -3638,8 +3672,8 @@ menu.add_checkbox('Visuals', 'Main', 'Enable', false)
 menu.add_checkbox('Visuals', 'Main', 'Indicators', false, function () {
     return menu.get_value('Visuals', 'Main', 'Enable')
 })
-/*
-menu.add_dropdown('Visuals', 'Main', 'Style', ['Default', 'Alternative'], 0, function () {
+
+/*menu.add_dropdown('Visuals', 'Main', 'Style', ['Default', 'Alternative'], 0, function () {
     return menu.get_value('Visuals', 'Main', 'Enable') && menu.get_value('Visuals', 'Main', 'Indicators')
 })*/
 
@@ -3647,15 +3681,22 @@ menu.add_colorpicker('Visuals', 'Main', 'Main color', [255, 255, 255, 255], func
     return menu.get_value('Visuals', 'Main', 'Enable') && menu.get_value('Visuals', 'Main', 'Indicators')
 })
 
+menu.add_checkbox('Visuals', 'Main', 'Custom height offset', false, function () {
+    return menu.get_value('Visuals', 'Main', 'Enable') && menu.get_value('Visuals', 'Main', 'Indicators')
+}, 'Custom Y add value')
+
+menu.add_slider('Visuals', 'Main', 'Height offset', 25, 10, 60, function () {
+    return menu.get_value('Visuals', 'Main', 'Enable') && menu.get_value('Visuals', 'Main', 'Indicators') && menu.get_value('Visuals', 'Main', 'Custom height offset')
+}, 'Custom Y add value in pixels')
+
 var indicators = {}
 
 indicators.default = {}
 
 indicators.default.render = function () {
-
     var main_switch = menu.get_value('Visuals', 'Main', 'Enable')
     var indicators = menu.get_value('Visuals', 'Main', 'Indicators')
-    var style = 0//menu.get_value('Visuals', 'Main', 'Style')
+    var style = 0//.get_value('Visuals', 'Main', 'Style')
 
     var main_color = menu.get_value('Visuals', 'Main', 'Main color')
 
@@ -3674,10 +3715,13 @@ indicators.default.render = function () {
 
     var SEGOE_UI_11 = render.GetFont('Segoeui.ttf', 11, true)
 
-    var offset = 50
+    var height_offset_enabled = menu.get_value('Visuals', 'Main', 'Custom height offset')
+    var height_offset = menu.get_value('Visuals', 'Main', 'Height offset')
+
+    var offset = height_offset_enabled ? height_offset : 25
     var indent = 0
 
-    var SCRIPT_NAME = script.name
+    var SCRIPT_NAME = script.name.toLowerCase()
     var SCRIPT_NAME_FONT = SEGOE_UI_11
     var SCRIPT_NAME_SIZE = render.TextSize(SCRIPT_NAME, SCRIPT_NAME_FONT)
 
@@ -3879,16 +3923,39 @@ indicators.default.render = function () {
 
     offset += HITCHANCE_SIZE[1] * HITCHANCE_ALPHA + indent
 
+    var EDGEYAW_VALUE = menu.get_value('Anti Aim', 'Main', 'Enable') && menu.get_value('Anti Aim', 'Main', 'Edge yaw') && menu.get_value('Anti Aim', 'Main', 'Key')
 
+    var EDGEYAW_ALPHA = visuals.new_animation('default indicators edge yaw alpha', EDGEYAW_VALUE ? 1 : 0)
 
+    var EDGEYAW_TEXT = 'edge yaw'
+    var EDGEYAW_FONT = SEGOE_UI_11
+    var EDGEYAW_SIZE = render.TextSize(EDGEYAW_TEXT, EDGEYAW_FONT)
 
-    
+    var EDGEYAW_COLOR = [168, 229, 255, 255 * EDGEYAW_ALPHA * alpha]
+    var EDGEYAW_SHADOW = [0, 0, 0, 255 * EDGEYAW_ALPHA * alpha]
 
+    render.String(screen_center[0] + 1,
+        screen_center[1] + offset + 1,
+        1, 
+        EDGEYAW_TEXT,
+        EDGEYAW_SHADOW,
+        EDGEYAW_FONT)
 
-    
-    
+    render.String(screen_center[0],
+        screen_center[1] + offset,
+        1, 
+        EDGEYAW_TEXT,
+        EDGEYAW_COLOR,
+        EDGEYAW_FONT)
+
+    offset += EDGEYAW_SIZE[1] * EDGEYAW_ALPHA + indent
 }
 
+indicators.alternative = {}
+
+indicators.alternative.render = function () {
+    //потом как нибудь
+}
 
 menu.add_subtab('Visuals', 'Markers')
 
@@ -4194,7 +4261,7 @@ markers.world.player_hurt = function () {
     var hitboxes = defines.hitboxes_by_hitgroup(hitgroup)
 
     if (hitboxes == undefined) {
-        return
+        hitboxes = [0]
     }
 
     var hit = undefined
@@ -4226,6 +4293,11 @@ markers.world.player_hurt = function () {
         time : Globals.Curtime() + markers.world.marker_timer,
         alpha : 1
     })
+}
+
+markers.world.round_start = function () {
+    markers.world.shot_data = []
+    markers.world.markers = []
 }
 
 markers.world.render = function () {
@@ -4442,13 +4514,13 @@ sounds.handle = function () {
     Cheat.ExecuteCommand('play ' + current_sound_path)   
 }
 
-
-
+Cheat.RegisterCallback('Unload', 'anti_aims.reset_on_unload')
 
 Cheat.RegisterCallback('player_hurt', 'sounds.handle')
 Cheat.RegisterCallback('player_hurt', 'markers.on_screen.update_timer')
 Cheat.RegisterCallback('bullet_impact', 'markers.world.bullet_impact')
 Cheat.RegisterCallback('player_hurt', 'markers.world.player_hurt')
+Cheat.RegisterCallback('round_start', 'markers.world.round_start')
 
 Cheat.RegisterCallback('CreateMove', 'anti_aims.edge_yaw.handle')
 Cheat.RegisterCallback('CreateMove', 'anti_aims.update_conditions')
@@ -4461,6 +4533,7 @@ Cheat.RegisterCallback('Draw', 'visuals.start_render')
 Cheat.RegisterCallback('Draw', 'menu.render')
 Cheat.RegisterCallback('Draw', 'menu.handle_keybinds')
 Cheat.RegisterCallback('Draw', 'indicators.default.render')
+//Cheat.RegisterCallback('Draw', 'indicators.alternative.render')
 Cheat.RegisterCallback('Draw', 'markers.on_screen.render')
 Cheat.RegisterCallback('Draw', 'markers.world.render')
 
