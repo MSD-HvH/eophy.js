@@ -44,7 +44,7 @@ var   FL_INWATER             = bit.lshift(1, 10)
 
 var script = {}
 
-script.name = 'eophy OBT'
+script.name = 'eophy'
 script.build = 'beta, not released' //ПХПХПХХПХП NOT RELIEASD 
 
 Math.deg = function (rad) {
