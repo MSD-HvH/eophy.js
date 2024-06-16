@@ -41,7 +41,6 @@ var   FL_CLIENT              = bit.lshift(1, 8)
 var   FL_FAKECLIENT          = bit.lshift(1, 9)
 var   FL_INWATER             = bit.lshift(1, 10)
 
-
 var script = {}
 
 script.name = 'eophy'
@@ -585,7 +584,6 @@ visuals.update_animations = function () {
 }
 
 visuals.new_animation = function (name, new_value, removing, speed_multiplier) {
-
     if (!visuals.animation_list[name]) {
         visuals.animation_list[name] = {}
         visuals.animation_list[name].color = [0, 0, 0, 0]
@@ -710,14 +708,6 @@ menu.add_checkbox = function (tab, subtab, name, def_value, visibility_condition
         throw new Error('Can`t find subtab.')
     }
 
-    menu.items[tab].items[subtab].items[name] = {}
-    menu.items[tab].items[subtab].items[name].name = name
-    menu.items[tab].items[subtab].items[name].tab = tab
-    menu.items[tab].items[subtab].items[name].subtab = subtab
-    menu.items[tab].items[subtab].items[name].type = 'checkbox'
-    menu.items[tab].items[subtab].items[name].value = def_value
-    menu.items[tab].items[subtab].items[name].hint = hint
-
     if (visibility_condition == undefined) {
         visibility_condition = function () {
             return true
@@ -728,15 +718,22 @@ menu.add_checkbox = function (tab, subtab, name, def_value, visibility_condition
         subscribed_function = function () {}
     }
 
-    menu.items[tab].items[subtab].items[name].visibility_condition = visibility_condition
-    menu.items[tab].items[subtab].items[name].subscribed_function = subscribed_function
-    menu.items[tab].items[subtab].items[name].hint_timer = 0
-
     if (skip_config == undefined) {
         skip_config = false
     }
 
-    menu.items[tab].items[subtab].items[name].skip_config = skip_config
+    menu.items[tab].items[subtab].items[name] = {
+        name : name,
+        tab : tab,
+        subtab : subtab,
+        type : 'checkbox',
+        value : def_value,
+        hint : hint,
+        visibility_condition : visibility_condition,
+        subscribed_function : subscribed_function,
+        hint_timer : 0,
+        skip_config : skip_config
+    }
 
     return menu.items[tab].items[subtab].items[name]
 }
@@ -751,16 +748,6 @@ menu.add_slider = function (tab, subtab, name, def_value, min, max, visibility_c
         throw new Error('Can`t find subtab.')
     }
 
-    menu.items[tab].items[subtab].items[name] = {}
-    menu.items[tab].items[subtab].items[name].name = name
-    menu.items[tab].items[subtab].items[name].tab = tab
-    menu.items[tab].items[subtab].items[name].subtab = subtab
-    menu.items[tab].items[subtab].items[name].type = 'slider'
-    menu.items[tab].items[subtab].items[name].value = def_value
-    menu.items[tab].items[subtab].items[name].min = min
-    menu.items[tab].items[subtab].items[name].max = max
-    menu.items[tab].items[subtab].items[name].hint = hint
-
     if (visibility_condition == undefined) {
         visibility_condition = function () {
             return true
@@ -771,16 +758,25 @@ menu.add_slider = function (tab, subtab, name, def_value, min, max, visibility_c
         subscribed_function = function () {}
     }
 
-    menu.items[tab].items[subtab].items[name].visibility_condition = visibility_condition
-    menu.items[tab].items[subtab].items[name].subscribed_function = subscribed_function
-    menu.items[tab].items[subtab].items[name].cache_value = def_value
-    menu.items[tab].items[subtab].items[name].hint_timer = 0
-
     if (skip_config == undefined) {
         skip_config = false
     }
 
-    menu.items[tab].items[subtab].items[name].skip_config = skip_config
+    menu.items[tab].items[subtab].items[name] = {
+        name : name,
+        tab : tab,
+        subtab : subtab,
+        type : 'slider',
+        value : def_value,
+        min : min,
+        max : max,
+        hint : hint,
+        visibility_condition : visibility_condition,
+        subscribed_function : subscribed_function,
+        cache_value : def_value,
+        hint_timer : 0,
+        skip_config : skip_config
+    }
 
     return menu.items[tab].items[subtab].items[name]
 }
@@ -795,16 +791,6 @@ menu.add_dropdown = function (tab, subtab, name, options, def_value, visibility_
         throw new Error('Can`t find subtab.')
     }
 
-    menu.items[tab].items[subtab].items[name] = {}
-    menu.items[tab].items[subtab].items[name].name = name
-    menu.items[tab].items[subtab].items[name].tab = tab
-    menu.items[tab].items[subtab].items[name].subtab = subtab
-    menu.items[tab].items[subtab].items[name].type = 'dropdown'
-    menu.items[tab].items[subtab].items[name].value = def_value
-    menu.items[tab].items[subtab].items[name].options = options
-    menu.items[tab].items[subtab].items[name].is_visible = false
-    menu.items[tab].items[subtab].items[name].hint = hint
-
     if (visibility_condition == undefined) {
         visibility_condition = function () {
             return true
@@ -815,15 +801,24 @@ menu.add_dropdown = function (tab, subtab, name, options, def_value, visibility_
         subscribed_function = function () {}
     }
 
-    menu.items[tab].items[subtab].items[name].visibility_condition = visibility_condition
-    menu.items[tab].items[subtab].items[name].subscribed_function = subscribed_function
-    menu.items[tab].items[subtab].items[name].hint_timer = 0
-
     if (skip_config == undefined) {
         skip_config = false
     }
 
-    menu.items[tab].items[subtab].items[name].skip_config = skip_config
+    menu.items[tab].items[subtab].items[name] = {
+        name : name,
+        tab : tab,
+        subtab : subtab,
+        type : 'dropdown',
+        value : def_value,
+        options : options,
+        is_visible : false,
+        hint : hint,
+        visibility_condition : visibility_condition,
+        subscribed_function : subscribed_function,
+        hint_timer : 0,
+        skip_config : skip_config
+    }
 
     return menu.items[tab].items[subtab].items[name]
 }
@@ -850,16 +845,6 @@ menu.add_multidropdown = function (tab, subtab, name, options, def_value, visibi
         })(options.length, false)
     }
 
-    menu.items[tab].items[subtab].items[name] = {}
-    menu.items[tab].items[subtab].items[name].name = name
-    menu.items[tab].items[subtab].items[name].tab = tab
-    menu.items[tab].items[subtab].items[name].subtab = subtab
-    menu.items[tab].items[subtab].items[name].type = 'multidropdown'
-    menu.items[tab].items[subtab].items[name].value = def_value
-    menu.items[tab].items[subtab].items[name].options = options
-    menu.items[tab].items[subtab].items[name].is_visible = false
-    menu.items[tab].items[subtab].items[name].hint = hint
-
     if (visibility_condition == undefined) {
         visibility_condition = function () {
             return true
@@ -870,15 +855,24 @@ menu.add_multidropdown = function (tab, subtab, name, options, def_value, visibi
         subscribed_function = function () {}
     }
 
-    menu.items[tab].items[subtab].items[name].visibility_condition = visibility_condition
-    menu.items[tab].items[subtab].items[name].subscribed_function = subscribed_function
-    menu.items[tab].items[subtab].items[name].hint_timer = 0
-
     if (skip_config == undefined) {
         skip_config = false
     }
 
-    menu.items[tab].items[subtab].items[name].skip_config = skip_config
+    menu.items[tab].items[subtab].items[name] = {
+        name : name,
+        tab : tab,
+        subtab : subtab,
+        type : 'multidropdown',
+        value : def_value,
+        options : options,
+        is_visible : false,
+        hint : hint,
+        visibility_condition : visibility_condition,
+        subscribed_function : subscribed_function,
+        hint_timer : 0,
+        skip_config : skip_config
+    }
 
     return menu.items[tab].items[subtab].items[name]
 }
@@ -893,16 +887,6 @@ menu.add_colorpicker = function (tab, subtab, name, def_value, visibility_condit
         throw new Error('Can`t find subtab.')
     }
 
-    menu.items[tab].items[subtab].items[name] = {}
-    menu.items[tab].items[subtab].items[name].name = name
-    menu.items[tab].items[subtab].items[name].tab = tab
-    menu.items[tab].items[subtab].items[name].subtab = subtab
-    menu.items[tab].items[subtab].items[name].type = 'colorpicker'
-    menu.items[tab].items[subtab].items[name].value = def_value
-    menu.items[tab].items[subtab].items[name].hsv = defines.rbg_to_hsv(def_value)
-    menu.items[tab].items[subtab].items[name].is_visible = false
-    menu.items[tab].items[subtab].items[name].hint = hint
-
     if (visibility_condition == undefined) {
         visibility_condition = function () {
             return true
@@ -913,16 +897,25 @@ menu.add_colorpicker = function (tab, subtab, name, def_value, visibility_condit
         subscribed_function = function () {}
     }
 
-    menu.items[tab].items[subtab].items[name].visibility_condition = visibility_condition
-    menu.items[tab].items[subtab].items[name].subscribed_function = subscribed_function
-    menu.items[tab].items[subtab].items[name].cache_value = def_value
-    menu.items[tab].items[subtab].items[name].hint_timer = 0
-
     if (skip_config == undefined) {
         skip_config = false
     }
 
-    menu.items[tab].items[subtab].items[name].skip_config = skip_config
+    menu.items[tab].items[subtab].items[name] = {
+        name : name,
+        tab : tab,
+        subtab : subtab,
+        type : 'colorpicker',
+        value : def_value,
+        hsv : defines.rbg_to_hsv(def_value),
+        is_visible : false,
+        hint : hint,
+        visibility_condition : visibility_condition,
+        subscribed_function : subscribed_function,
+        cache_value : def_value,
+        hint_timer : 0,
+        skip_config : skip_config
+    }
 
     return menu.items[tab].items[subtab].items[name]
 }
@@ -943,22 +936,22 @@ menu.add_button = function (tab, subtab, name, func, visibility_condition, hint)
         }
     }
 
-    menu.items[tab].items[subtab].items[name] = {}
-    menu.items[tab].items[subtab].items[name].name = name
-    menu.items[tab].items[subtab].items[name].tab = tab
-    menu.items[tab].items[subtab].items[name].subtab = subtab
-    menu.items[tab].items[subtab].items[name].type = 'button'
-    menu.items[tab].items[subtab].items[name].func = func
-    menu.items[tab].items[subtab].items[name].hint = hint
-
     if (visibility_condition == undefined) {
         visibility_condition = function () {
             return true
         }
     }
-
-    menu.items[tab].items[subtab].items[name].visibility_condition = visibility_condition
-    menu.items[tab].items[subtab].items[name].hint_timer = 0
+    
+    menu.items[tab].items[subtab].items[name] = {
+        name : name,
+        tab : tab,
+        subtab : subtab,
+        type : 'button',
+        func : func,
+        hint : hint,
+        visibility_condition : visibility_condition,
+        hint_timer : 0
+    }
 
     return menu.items[tab].items[subtab].items[name]
 }
@@ -973,38 +966,37 @@ menu.add_keybind = function (tab, subtab, name, visibility_condition, hint, skip
         throw new Error('Can`t find subtab.')
     }
 
-    menu.items[tab].items[subtab].items[name] = {}
-    menu.items[tab].items[subtab].items[name].name = name
-    menu.items[tab].items[subtab].items[name].tab = tab
-    menu.items[tab].items[subtab].items[name].subtab = subtab
-    menu.items[tab].items[subtab].items[name].type = 'keybind'
-    menu.items[tab].items[subtab].items[name].key = undefined
-    menu.items[tab].items[subtab].items[name].value = false
-    menu.items[tab].items[subtab].items[name].listening = false
-    menu.items[tab].items[subtab].items[name].modes = ['Hold', 'Toggle', 'Always']
-    menu.items[tab].items[subtab].items[name].mode = 0
-    menu.items[tab].items[subtab].items[name].is_visible = false
-    menu.items[tab].items[subtab].items[name].hint = hint
-
     if (visibility_condition == undefined) {
         visibility_condition = function () {
             return true
         }
     }
 
-    menu.items[tab].items[subtab].items[name].visibility_condition = visibility_condition
-    menu.items[tab].items[subtab].items[name].hint_timer = 0
-
     if (skip_config == undefined) {
         skip_config = false
     }
-
-    menu.items[tab].items[subtab].items[name].skip_config = skip_config
+    
+    menu.items[tab].items[subtab].items[name] = {
+        name : name,
+        tab : tab,
+        subtab : subtab,
+        type : 'keybind',
+        key : undefined,
+        value : false,
+        listening : false,
+        modes : ['Hold', 'Toggle', 'Always'],
+        mode : 0,
+        is_visible : false,
+        hint : hint,
+        visibility_condition : visibility_condition,
+        hint_timer : 0,
+        skip_config : skip_config
+    }
 
     return menu.items[tab].items[subtab].items[name]
 }
 
-menu.add_label = function (tab, subtab, name, text, visibility_condition, hint) {
+menu.add_label = function (tab, subtab, text, visibility_condition, hint) {
 
     if (!menu.items[tab]) {
         throw new Error('Can`t find tab.')
@@ -1014,24 +1006,24 @@ menu.add_label = function (tab, subtab, name, text, visibility_condition, hint) 
         throw new Error('Can`t find subtab.')
     }
 
-    menu.items[tab].items[subtab].items[name] = {}
-    menu.items[tab].items[subtab].items[name].name = name
-    menu.items[tab].items[subtab].items[name].tab = tab
-    menu.items[tab].items[subtab].items[name].subtab = subtab
-    menu.items[tab].items[subtab].items[name].type = 'label'
-    menu.items[tab].items[subtab].items[name].text = text
-    menu.items[tab].items[subtab].items[name].hint = hint
-
     if (visibility_condition == undefined) {
         visibility_condition = function () {
             return true
         }
     }
+    
+    menu.items[tab].items[subtab].items[text] = {
+        name : text,
+        tab : tab,
+        subtab : subtab,
+        type : 'label',
+        text : text,
+        hint : hint,
+        visibility_condition : visibility_condition,
+        hint_timer : 0
+    }
 
-    menu.items[tab].items[subtab].items[name].visibility_condition = visibility_condition
-    menu.items[tab].items[subtab].items[name].hint_timer = 0
-
-    return menu.items[tab].items[subtab].items[name]
+    return menu.items[tab].items[subtab].items[text]
 }
 
 menu.get_value = function (tab, subtab, name) {
@@ -1243,8 +1235,7 @@ menu.colors.new_theme('Default', {
     HINT_ITEM_NAME : [240, 240, 240, 255],
     HINT_DESCRIPTION : [150, 150, 150, 255],
 
-    LABEL_NAME : [250, 250, 250, 255]
-
+    LABEL_COLOR : [250, 250, 250, 255]
 })
 
 menu.colors.new_theme('Cherry', {
@@ -1297,7 +1288,7 @@ menu.colors.new_theme('Cherry', {
     HINT_ITEM_NAME : [245, 240, 240, 255],
     HINT_DESCRIPTION : [165, 150, 150, 255],
 
-    LABEL_NAME : [255, 250, 250, 255]
+    LABEL_COLOR : [255, 250, 250, 255]
 })
 
 menu.colors.new_theme('Midnight', {
@@ -1350,7 +1341,7 @@ menu.colors.new_theme('Midnight', {
     HINT_ITEM_NAME : [240, 240, 245, 255],
     HINT_DESCRIPTION : [150, 150, 165, 255],
 
-    LABEL_NAME : [250, 250, 255, 255]
+    LABEL_COLOR : [250, 250, 255, 255]
 })
 
 menu.dpi_scale = 1
@@ -1392,63 +1383,71 @@ menu.render = function () {
     var MENU_INTERACTION_PERMISSION = menu_alpha > 0.8 && UI.IsMenuOpen() // эт чтобы типа случайно ничего не тыкалось когда меню не видно
 
     var MENU_POSITION = drag.get_position('menu')
+    var MENU_DPI_SCALE = menu.dpi_scale
 
-    var HEADER_SCRIPT_NAME_FONT = render.GetFont('Segoeuib.ttf', 12 * menu.dpi_scale, true)
-    var HEADER_TAB_NAME_FONT = render.GetFont('Segoeui.ttf', 12 * menu.dpi_scale, true)    
-    var SUBTAB_NAME_FONT = render.GetFont('Segoeui.ttf', 10 * menu.dpi_scale, true)
-    var ITEM_NAME_FONT = render.GetFont('Segoeui.ttf', 11 * menu.dpi_scale, true)
-    var DROPDOWN_PREVIEW_FONT = render.GetFont('Segoeui.ttf', 9 * menu.dpi_scale, true)
-    var BUTTON_NAME_FONT = render.GetFont('Segoeui.ttf', 10 * menu.dpi_scale, true)
-    var KEYBINDS_KEY_PREVIEW_FONT = render.GetFont('Segoeui.ttf', 9 * menu.dpi_scale, true)
-    var HINT_TEXT_FONT = render.GetFont('Segoeui.ttf', 11 * menu.dpi_scale, true)
+    var INPUT_CURSOR = input.cursor()
+    var INPUT_CURSOR_HELD = input.held_cursor()
+    var INPUT_PRESSED_0X01 = input.pressed(0x01)
+    var INPUT_HELD_0X01 = input.held(0x01)
+
+    var HEADER_SCRIPT_NAME_FONT = render.GetFont('Segoeuib.ttf', 12 * MENU_DPI_SCALE, true)
+    var HEADER_TAB_NAME_FONT = render.GetFont('Segoeui.ttf', 12 * MENU_DPI_SCALE, true)    
+    var SUBTAB_NAME_FONT = render.GetFont('Segoeui.ttf', 10 * MENU_DPI_SCALE, true)
+    var ITEM_NAME_FONT = render.GetFont('Segoeui.ttf', 11 * MENU_DPI_SCALE, true)
+    var DROPDOWN_PREVIEW_FONT = render.GetFont('Segoeui.ttf', 9 * MENU_DPI_SCALE, true)
+    var BUTTON_NAME_FONT = render.GetFont('Segoeui.ttf', 10 * MENU_DPI_SCALE, true)
+    var KEYBINDS_KEY_PREVIEW_FONT = render.GetFont('Segoeui.ttf', 9 * MENU_DPI_SCALE, true)
+    var HINT_TEXT_FONT = render.GetFont('Segoeui.ttf', 11 * MENU_DPI_SCALE, true)
 
     //сам себя благодарю, что придумал такое, ведь иначе не смог бы сделать нормально DPI Scale feature
 
-    var HEADER_SIZE = [300 * menu.dpi_scale, 30 * menu.dpi_scale]
-    var HEADER_SCRIPT_NAME_INDENT = [10 * menu.dpi_scale, 7 * menu.dpi_scale]
-    var HEADER_PER_TAB_NAME_INDENT = 5 * menu.dpi_scale
-    var HEADER_TAB_NAMES_INDENT = [10 * menu.dpi_scale, 7 * menu.dpi_scale]
+    var HEADER_SIZE = [300 * MENU_DPI_SCALE, 30 * MENU_DPI_SCALE]
+    var HEADER_SCRIPT_NAME_INDENT = [10 * MENU_DPI_SCALE, 7 * MENU_DPI_SCALE]
+    var HEADER_PER_TAB_NAME_INDENT = 5 * MENU_DPI_SCALE
+    var HEADER_TAB_NAMES_INDENT = [10 * MENU_DPI_SCALE, 7 * MENU_DPI_SCALE]
 
-    var SUBTAB_INDENT = 6 * menu.dpi_scale
+    var SUBTAB_INDENT = 6 * MENU_DPI_SCALE
     var SUBTAB_SIZE_W = (HEADER_SIZE[0] - SUBTAB_INDENT) / 2 
-    var SUBTAB_NAME_IDENT = [10 * menu.dpi_scale, 10 * menu.dpi_scale]
+    var SUBTAB_NAME_IDENT = [10 * MENU_DPI_SCALE, 10 * MENU_DPI_SCALE]
 
-    var ITEMS_INDENT = [SUBTAB_NAME_IDENT[0], 10 * menu.dpi_scale] //по X от левой грани сабтаба, по Y между друг другом
+    var ITEMS_INDENT = [SUBTAB_NAME_IDENT[0], 10 * MENU_DPI_SCALE] //по X от левой грани сабтаба, по Y между друг другом
 
-    var CHECKBOX_BOX_SIZE = [10 * menu.dpi_scale, 10 * menu.dpi_scale]
-    var CHECKBOX_NAME_BOX_INDENT = 5 * menu.dpi_scale
+    var CHECKBOX_BOX_SIZE = [10 * MENU_DPI_SCALE, 10 * MENU_DPI_SCALE]
+    var CHECKBOX_NAME_BOX_INDENT = 5 * MENU_DPI_SCALE
     var CHECKBOX_ITEM_INDENT = CHECKBOX_BOX_SIZE[1] + ITEMS_INDENT[1] //по Y, между друг другом
 
-    var SLIDER_BOX_SIZE = [SUBTAB_SIZE_W - ITEMS_INDENT[0] * 2, 7 * menu.dpi_scale]
-    var SLIDER_NAME_INDENT = 7 * menu.dpi_scale
-    var SLIDER_ITEM_INDENT = 11 * menu.dpi_scale + SLIDER_NAME_INDENT + SLIDER_BOX_SIZE[1] + ITEMS_INDENT[1]
+    var SLIDER_BOX_SIZE = [SUBTAB_SIZE_W - ITEMS_INDENT[0] * 2, 7 * MENU_DPI_SCALE]
+    var SLIDER_NAME_INDENT = 7 * MENU_DPI_SCALE
+    var SLIDER_ITEM_INDENT = 11 * MENU_DPI_SCALE + SLIDER_NAME_INDENT + SLIDER_BOX_SIZE[1] + ITEMS_INDENT[1]
 
-    var DROPDOWN_BOX_SIZE = [SUBTAB_SIZE_W - ITEMS_INDENT[0] * 2, 18 * menu.dpi_scale]
-    var DROPDOWN_NAME_INDENT = 7 * menu.dpi_scale
-    var DROPDOWN_ITEM_INDENT = 11 * menu.dpi_scale + DROPDOWN_NAME_INDENT + DROPDOWN_BOX_SIZE[1] + ITEMS_INDENT[1]
-    var DROPDOWN_PREVIEW_INDENT = 5 * menu.dpi_scale
+    var DROPDOWN_BOX_SIZE = [SUBTAB_SIZE_W - ITEMS_INDENT[0] * 2, 18 * MENU_DPI_SCALE]
+    var DROPDOWN_NAME_INDENT = 7 * MENU_DPI_SCALE
+    var DROPDOWN_ITEM_INDENT = 11 * MENU_DPI_SCALE + DROPDOWN_NAME_INDENT + DROPDOWN_BOX_SIZE[1] + ITEMS_INDENT[1]
+    var DROPDOWN_PREVIEW_INDENT = 5 * MENU_DPI_SCALE
 
-    var COLORPICKER_BOX_SIZE = [10 * menu.dpi_scale, 10 * menu.dpi_scale]
-    var COLORPICKER_NAME_BOX_INDENT = 5 * menu.dpi_scale
-    var COLORPICKER_PICKER_INDENT = [5 * menu.dpi_scale, 5 * menu.dpi_scale]
+    var COLORPICKER_BOX_SIZE = [10 * MENU_DPI_SCALE, 10 * MENU_DPI_SCALE]
+    var COLORPICKER_NAME_BOX_INDENT = 5 * MENU_DPI_SCALE
+    var COLORPICKER_PICKER_INDENT = [5 * MENU_DPI_SCALE, 5 * MENU_DPI_SCALE]
     var COLORPICKER_ITEM_INDENT = COLORPICKER_BOX_SIZE[1] + ITEMS_INDENT[1]
-    var COLORPICKER_PICKER_COLOR_SIZE = [90 * menu.dpi_scale, 90 * menu.dpi_scale]
-    var COLORPICKER_PICKER_HUE_SIZE = [7 * menu.dpi_scale, 90 * menu.dpi_scale]
-    var COLORPICKER_PICKER_ALPHA_SIZE = [7 * menu.dpi_scale, 90 * menu.dpi_scale]
-    var COLORPICKER_PICKER_CROSSHAIR_SIZE = 3 * menu.dpi_scale
+    var COLORPICKER_PICKER_COLOR_SIZE = [90 * MENU_DPI_SCALE, 90 * MENU_DPI_SCALE]
+    var COLORPICKER_PICKER_HUE_SIZE = [7 * MENU_DPI_SCALE, 90 * MENU_DPI_SCALE]
+    var COLORPICKER_PICKER_ALPHA_SIZE = [7 * MENU_DPI_SCALE, 90 * MENU_DPI_SCALE]
+    var COLORPICKER_PICKER_CROSSHAIR_SIZE = 3 * MENU_DPI_SCALE
     var COLORPICKER_FILEDS_INDENT = ITEMS_INDENT[0]
     var COLORPICKER_PICKER_SIZE = [COLORPICKER_PICKER_COLOR_SIZE[0] + COLORPICKER_PICKER_HUE_SIZE[0] + COLORPICKER_PICKER_ALPHA_SIZE[0] + COLORPICKER_FILEDS_INDENT * 4, COLORPICKER_PICKER_COLOR_SIZE[1] + COLORPICKER_FILEDS_INDENT * 2]
 
-    var BUTTON_BOX_SIZE = [SUBTAB_SIZE_W - ITEMS_INDENT[0] * 2, 18 * menu.dpi_scale]
+    var BUTTON_BOX_SIZE = [SUBTAB_SIZE_W - ITEMS_INDENT[0] * 2, 18 * MENU_DPI_SCALE]
     var BUTTON_ITEM_INDENT = BUTTON_BOX_SIZE[1] + ITEMS_INDENT[1]
 
-    var KEYBIND_BOX_SIZE = [14 * menu.dpi_scale, 14 * menu.dpi_scale]
+    var KEYBIND_BOX_SIZE = [14 * MENU_DPI_SCALE, 14 * MENU_DPI_SCALE]
     var KEYBIND_PLACE_SIZE = SUBTAB_SIZE_W - ITEMS_INDENT[0] * 2
     var KEYBIND_ITEM_INDENT = KEYBIND_BOX_SIZE[1] + ITEMS_INDENT[1]
-    var KEYBIND_KEY_PREVIEW_INDENT = 4 * menu.dpi_scale
-    var KEYBIND_MODE_WINDOW_SIZE = [45 * menu.dpi_scale, KEYBIND_BOX_SIZE[1] * 1.5] 
+    var KEYBIND_KEY_PREVIEW_INDENT = 4 * MENU_DPI_SCALE
+    var KEYBIND_MODE_WINDOW_SIZE = [45 * MENU_DPI_SCALE, KEYBIND_BOX_SIZE[1] * 1.5] 
 
-    var HINT_INDENT = 6 * menu.dpi_scale
+    var LABEL_ITEM_INDENT = 11 * MENU_DPI_SCALE + ITEMS_INDENT[1]
+
+    var HINT_INDENT = 6 * MENU_DPI_SCALE
 
     // Header zone 
 
@@ -1482,7 +1481,7 @@ menu.render = function () {
     var KEYBIND_TYPE_SELECTORS = []
     var HINTS = []
 
-    var CURTIME = Globals.Curtime()
+    var CURTIME = Globals.Realtime()
 
     for (tab in menu.items) {
 
@@ -1508,8 +1507,8 @@ menu.render = function () {
 
         var TAB_INTERACTION_PERMISSION = MENU_INTERACTION_PERMISSION
 
-        if (input.pressed(0x01) && TAB_INTERACTION_PERMISSION) {
-            if (defines.in_bounds(input.cursor(), TAB_NAME_POSITION, TAB_NAME_SIZE)) {
+        if (INPUT_PRESSED_0X01 && TAB_INTERACTION_PERMISSION) {
+            if (defines.in_bounds(INPUT_CURSOR, TAB_NAME_POSITION, TAB_NAME_SIZE)) {
                 menu.current_tab = tab
             }
         }
@@ -1625,8 +1624,8 @@ menu.render = function () {
                         CHECKBOX_NAME_COLOR,
                         ITEM_NAME_FONT)
 
-                    if (defines.in_bounds(input.cursor(), ITEM_POSITION, [CHECKBOX_BOX_SIZE[0] + CHECKBOX_NAME_BOX_INDENT + ITEM_NAME_SIZE[0], CHECKBOX_BOX_SIZE[1]]) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
-                        if (input.pressed(0x01)) {
+                    if (defines.in_bounds(INPUT_CURSOR, ITEM_POSITION, [CHECKBOX_BOX_SIZE[0] + CHECKBOX_NAME_BOX_INDENT + ITEM_NAME_SIZE[0], CHECKBOX_BOX_SIZE[1]]) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
+                        if (INPUT_PRESSED_0X01) {
                             objItem.value = !objItem.value
                             objItem.subscribed_function()
                         }
@@ -1644,7 +1643,7 @@ menu.render = function () {
                         })
                     }
                     
-                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] = SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] + CHECKBOX_ITEM_INDENT * ITEM_ALPHA
+                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] += CHECKBOX_ITEM_INDENT * ITEM_ALPHA
                 } else if (objItem.type == 'slider') {
 
                     var SLIDER_NAME_COLOR = defines.alpha_override(COLORS.SLIDER_NAME,
@@ -1698,7 +1697,7 @@ menu.render = function () {
                             SLIDER_BOX_ACTIVE_COLOR)
                     }
                     
-                    if (defines.in_bounds(input.held_cursor(), [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + SLIDER_NAME_INDENT], SLIDER_BOX_SIZE) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
+                    if (defines.in_bounds(INPUT_CURSOR_HELD, [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + SLIDER_NAME_INDENT], SLIDER_BOX_SIZE) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
                         if (input.pressed(0x25)) {
                             objItem.value--
                             objItem.hint_timer = CURTIME
@@ -1709,8 +1708,8 @@ menu.render = function () {
                             objItem.hint_timer = CURTIME
                         }
 
-                        if (input.held(0x01)) {
-                            var cursor_value_clamped = Math.clamp(input.cursor()[0],
+                        if (INPUT_HELD_0X01) {
+                            var cursor_value_clamped = Math.clamp(INPUT_CURSOR[0],
                                 ITEM_POSITION[0],
                                 ITEM_POSITION[0] + SLIDER_BOX_SIZE[0])
                             
@@ -1726,7 +1725,7 @@ menu.render = function () {
                         }
                     }
 
-                    if (!(defines.in_bounds(input.cursor(), ITEM_POSITION, [ITEM_NAME_SIZE[0] + SLIDER_BOX_SIZE[0], ITEM_NAME_SIZE[1] + SLIDER_BOX_SIZE[1] + SLIDER_NAME_INDENT]) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN())) {
+                    if (!(defines.in_bounds(INPUT_CURSOR, ITEM_POSITION, [ITEM_NAME_SIZE[0] + SLIDER_BOX_SIZE[0], ITEM_NAME_SIZE[1] + SLIDER_BOX_SIZE[1] + SLIDER_NAME_INDENT]) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN())) {
                         objItem.hint_timer = CURTIME
                     }
                         
@@ -1740,7 +1739,7 @@ menu.render = function () {
                         })
                     }
                     
-                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] = SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] + SLIDER_ITEM_INDENT * ITEM_ALPHA
+                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] += SLIDER_ITEM_INDENT * ITEM_ALPHA
                 } else if (objItem.type == 'dropdown') {
 
                     var DROPDOWN_NAME_COLOR = defines.alpha_override(COLORS.DROPDOWN_NAME,
@@ -1784,13 +1783,13 @@ menu.render = function () {
                         DROPDOWN_VALUES_PREVIEW,
                         DROPDOWN_PREVIEW_FONT)
                     
-                    if (input.pressed(0x01) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
-                        if (defines.in_bounds(input.cursor(), [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT], DROPDOWN_BOX_SIZE)) {
+                    if (INPUT_PRESSED_0X01 && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
+                        if (defines.in_bounds(INPUT_CURSOR, [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT], DROPDOWN_BOX_SIZE)) {
                             objItem.is_visible = !objItem.is_visible
                         }
                     }
 
-                    if (!(defines.in_bounds(input.cursor(), [ITEM_POSITION[0], ITEM_POSITION[1]], [DROPDOWN_BOX_SIZE[0], ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT + DROPDOWN_BOX_SIZE[1]]) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN())) {
+                    if (!(defines.in_bounds(INPUT_CURSOR, [ITEM_POSITION[0], ITEM_POSITION[1]], [DROPDOWN_BOX_SIZE[0], ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT + DROPDOWN_BOX_SIZE[1]]) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN())) {
                         objItem.hint_timer = CURTIME
                     }
                     
@@ -1816,8 +1815,8 @@ menu.render = function () {
 
                         for (p in objItem.options) {
 
-                            if (input.pressed(0x01) && ITEM_INTERACTION_PERMISSION && DROPDOWN_PREVIEW_ANIM > 0.8) {
-                                if (defines.in_bounds(input.cursor(), [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT + DROPDOWN_BOX_SIZE[1] + OPTIONS_OFFSET], DROPDOWN_BOX_SIZE)) {
+                            if (INPUT_PRESSED_0X01 && ITEM_INTERACTION_PERMISSION && DROPDOWN_PREVIEW_ANIM > 0.8) {
+                                if (defines.in_bounds(INPUT_CURSOR, [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT + DROPDOWN_BOX_SIZE[1] + OPTIONS_OFFSET], DROPDOWN_BOX_SIZE)) {
                                     objItem.value = p
                                     objItem.is_visible = false
                                     objItem.subscribed_function()
@@ -1827,8 +1826,8 @@ menu.render = function () {
                             OPTIONS_OFFSET += DROPDOWN_BOX_SIZE[1]
                         }
                     
-                        if (input.pressed(0x01) && ITEM_INTERACTION_PERMISSION) {
-                            if (!defines.in_bounds(input.cursor(), [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT], [DROPDOWN_BOX_SIZE[0], DROPDOWN_BOX_SIZE[1] * (objItem.options.length + 1)])) {
+                        if (INPUT_PRESSED_0X01 && ITEM_INTERACTION_PERMISSION) {
+                            if (!defines.in_bounds(INPUT_CURSOR, [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT], [DROPDOWN_BOX_SIZE[0], DROPDOWN_BOX_SIZE[1] * (objItem.options.length + 1)])) {
                                 objItem.is_visible = false
                             }
                         }
@@ -1841,7 +1840,7 @@ menu.render = function () {
     
                     }
                     
-                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] = SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] + DROPDOWN_ITEM_INDENT * ITEM_ALPHA
+                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] += DROPDOWN_ITEM_INDENT * ITEM_ALPHA
                 } else if (objItem.type == 'multidropdown') {
 
                     var DROPDOWN_NAME_COLOR = defines.alpha_override(COLORS.DROPDOWN_NAME,
@@ -1875,7 +1874,7 @@ menu.render = function () {
                         DROPDOWN_BOX_SIZE[1],
                         DROPDOWN_OUTLINE_COLOR)
 
-                    if (!(defines.in_bounds(input.cursor(), [ITEM_POSITION[0], ITEM_POSITION[1]], [DROPDOWN_BOX_SIZE[0], ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT + DROPDOWN_BOX_SIZE[1]]) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN())) {
+                    if (!(defines.in_bounds(INPUT_CURSOR, [ITEM_POSITION[0], ITEM_POSITION[1]], [DROPDOWN_BOX_SIZE[0], ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT + DROPDOWN_BOX_SIZE[1]]) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN())) {
                         objItem.hint_timer = CURTIME
                     }
 
@@ -1922,8 +1921,8 @@ menu.render = function () {
                         DROPDOWN_VALUES_PREVIEW,
                         DROPDOWN_PREVIEW_FONT)
                     
-                    if (input.pressed(0x01) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
-                        if (defines.in_bounds(input.cursor(), [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT], DROPDOWN_BOX_SIZE)) {
+                    if (INPUT_PRESSED_0X01 && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
+                        if (defines.in_bounds(INPUT_CURSOR, [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT], DROPDOWN_BOX_SIZE)) {
                             objItem.is_visible = !objItem.is_visible
                         }
                     }
@@ -1940,8 +1939,8 @@ menu.render = function () {
 
                         for (p in objItem.options) {
 
-                            if (input.pressed(0x01) && ITEM_INTERACTION_PERMISSION && DROPDOWN_PREVIEW_ANIM > 0.8) {
-                                if (defines.in_bounds(input.cursor(), [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT + DROPDOWN_BOX_SIZE[1] + OPTIONS_OFFSET], DROPDOWN_BOX_SIZE)) {
+                            if (INPUT_PRESSED_0X01 && ITEM_INTERACTION_PERMISSION && DROPDOWN_PREVIEW_ANIM > 0.8) {
+                                if (defines.in_bounds(INPUT_CURSOR, [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT + DROPDOWN_BOX_SIZE[1] + OPTIONS_OFFSET], DROPDOWN_BOX_SIZE)) {
                                     objItem.value[p] = !objItem.value[p]
                                     objItem.subscribed_function()
                                 }
@@ -1950,8 +1949,8 @@ menu.render = function () {
                             OPTIONS_OFFSET = OPTIONS_OFFSET + DROPDOWN_BOX_SIZE[1]
                         }
                     
-                        if (input.pressed(0x01) && ITEM_INTERACTION_PERMISSION) {
-                            if (!defines.in_bounds(input.cursor(), [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT], [DROPDOWN_BOX_SIZE[0], DROPDOWN_BOX_SIZE[1] * (objItem.options.length + 1)])) {
+                        if (INPUT_PRESSED_0X01 && ITEM_INTERACTION_PERMISSION) {
+                            if (!defines.in_bounds(INPUT_CURSOR, [ITEM_POSITION[0], ITEM_POSITION[1] + ITEM_NAME_SIZE[1] + DROPDOWN_NAME_INDENT], [DROPDOWN_BOX_SIZE[0], DROPDOWN_BOX_SIZE[1] * (objItem.options.length + 1)])) {
                                 objItem.is_visible = false
                             }
                         }
@@ -1964,7 +1963,7 @@ menu.render = function () {
     
                     }
                     
-                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] = SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] + DROPDOWN_ITEM_INDENT * ITEM_ALPHA
+                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] += DROPDOWN_ITEM_INDENT * ITEM_ALPHA
                 } else if (objItem.type == 'colorpicker') {
 
                     var COLORPICKER_BOX_COLOR = defines.alpha_override(visuals.new_animation(id_n + 'colorpicker box', COLORS.COLORPICKER_BOX),
@@ -1998,14 +1997,14 @@ menu.render = function () {
                         COLORPICKER_NAME_COLOR,
                         ITEM_NAME_FONT)
 
-                    if (input.pressed(0x01) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) { 
-                        if (defines.in_bounds(input.cursor(), ITEM_POSITION , [COLORPICKER_BOX_SIZE[0] + COLORPICKER_NAME_BOX_INDENT + ITEM_NAME_SIZE[0], COLORPICKER_BOX_SIZE[1]])) {
+                    if (INPUT_PRESSED_0X01 && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) { 
+                        if (defines.in_bounds(INPUT_CURSOR, ITEM_POSITION , [COLORPICKER_BOX_SIZE[0] + COLORPICKER_NAME_BOX_INDENT + ITEM_NAME_SIZE[0], COLORPICKER_BOX_SIZE[1]])) {
                             objItem.is_visible = true
                         }
                     }
 
-                    if (defines.in_bounds(input.cursor(), ITEM_POSITION , [COLORPICKER_BOX_SIZE[0] + COLORPICKER_NAME_BOX_INDENT + ITEM_NAME_SIZE[0], COLORPICKER_BOX_SIZE[1]]) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
-                        if (input.pressed(0x01)) { 
+                    if (defines.in_bounds(INPUT_CURSOR, ITEM_POSITION , [COLORPICKER_BOX_SIZE[0] + COLORPICKER_NAME_BOX_INDENT + ITEM_NAME_SIZE[0], COLORPICKER_BOX_SIZE[1]]) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
+                        if (INPUT_PRESSED_0X01) { 
                             objItem.is_visible = true
                         }
                     } else {
@@ -2035,18 +2034,18 @@ menu.render = function () {
                             ANIM : COLORPICKER_ANIM
                         }
 
-                        if (input.pressed(0x01) && ITEM_INTERACTION_PERMISSION) {
-                            if (!(defines.in_bounds(input.cursor(), COLORPICKER_TABLE.POSITION, COLORPICKER_PICKER_SIZE) || defines.in_bounds(input.cursor(), ITEM_POSITION, [COLORPICKER_BOX_SIZE[0] + COLORPICKER_NAME_BOX_INDENT + ITEM_NAME_SIZE[0], COLORPICKER_BOX_SIZE[1]]))) {
+                        if (INPUT_PRESSED_0X01 && ITEM_INTERACTION_PERMISSION) {
+                            if (!(defines.in_bounds(INPUT_CURSOR, COLORPICKER_TABLE.POSITION, COLORPICKER_PICKER_SIZE) || defines.in_bounds(INPUT_CURSOR, ITEM_POSITION, [COLORPICKER_BOX_SIZE[0] + COLORPICKER_NAME_BOX_INDENT + ITEM_NAME_SIZE[0], COLORPICKER_BOX_SIZE[1]]))) {
                                 objItem.is_visible = false
                             }
                         }
                         //render.String(COLORPICKER_TABLE.POSITION[0], COLORPICKER_TABLE.POSITION[1] + 200, 0, objItem.hsv.join(',') + ' - hsv', [255, 0, 0, 255], Render.GetFont('Verdana.ttf', 15, true))
                         // ^^^ это короче я че то когда конфиги делал ебался (лучше не знать, в чем была ошибка)))
 
-                        if (input.held(0x01) && ITEM_INTERACTION_PERMISSION) {
+                        if (INPUT_HELD_0X01 && ITEM_INTERACTION_PERMISSION) {
 
-                            if (defines.in_bounds(input.held_cursor(), [COLORPICKER_TABLE.POSITION[0] + COLORPICKER_PICKER_COLOR_SIZE[0] + COLORPICKER_FILEDS_INDENT * 2, COLORPICKER_TABLE.POSITION[1] + COLORPICKER_FILEDS_INDENT], COLORPICKER_PICKER_HUE_SIZE)) {
-                                var hue_clamped = Math.clamp(input.cursor()[1],
+                            if (defines.in_bounds(INPUT_CURSOR_HELD, [COLORPICKER_TABLE.POSITION[0] + COLORPICKER_PICKER_COLOR_SIZE[0] + COLORPICKER_FILEDS_INDENT * 2, COLORPICKER_TABLE.POSITION[1] + COLORPICKER_FILEDS_INDENT], COLORPICKER_PICKER_HUE_SIZE)) {
+                                var hue_clamped = Math.clamp(INPUT_CURSOR[1],
                                     COLORPICKER_TABLE.POSITION[1] + COLORPICKER_FILEDS_INDENT,
                                     COLORPICKER_TABLE.POSITION[1] + COLORPICKER_FILEDS_INDENT + COLORPICKER_PICKER_HUE_SIZE[1])
 
@@ -2056,8 +2055,8 @@ menu.render = function () {
                                 objItem.hsv[0] = float
                             }
 
-                            if (defines.in_bounds(input.held_cursor(), [COLORPICKER_TABLE.POSITION[0] + COLORPICKER_FILEDS_INDENT, COLORPICKER_TABLE.POSITION[1] + COLORPICKER_FILEDS_INDENT], COLORPICKER_PICKER_COLOR_SIZE)) {
-                                var saturation_clamped = Math.clamp(input.cursor()[0],
+                            if (defines.in_bounds(INPUT_CURSOR_HELD, [COLORPICKER_TABLE.POSITION[0] + COLORPICKER_FILEDS_INDENT, COLORPICKER_TABLE.POSITION[1] + COLORPICKER_FILEDS_INDENT], COLORPICKER_PICKER_COLOR_SIZE)) {
+                                var saturation_clamped = Math.clamp(INPUT_CURSOR[0],
                                     COLORPICKER_TABLE.POSITION[0] + COLORPICKER_FILEDS_INDENT,
                                     COLORPICKER_TABLE.POSITION[0] + COLORPICKER_FILEDS_INDENT + COLORPICKER_PICKER_COLOR_SIZE[0])
 
@@ -2066,7 +2065,7 @@ menu.render = function () {
 
                                 objItem.hsv[1] = s_float
                                 
-                                var value_clamped = Math.clamp(input.cursor()[1],
+                                var value_clamped = Math.clamp(INPUT_CURSOR[1],
                                     COLORPICKER_TABLE.POSITION[1] + COLORPICKER_FILEDS_INDENT,
                                     COLORPICKER_TABLE.POSITION[1] + COLORPICKER_FILEDS_INDENT + COLORPICKER_PICKER_COLOR_SIZE[1])
 
@@ -2076,8 +2075,8 @@ menu.render = function () {
                                 objItem.hsv[2] = 1 - v_float
                             }
 
-                            if (defines.in_bounds(input.held_cursor(), [COLORPICKER_TABLE.POSITION[0] + COLORPICKER_PICKER_COLOR_SIZE[0] + COLORPICKER_PICKER_HUE_SIZE[0] + COLORPICKER_FILEDS_INDENT * 3, COLORPICKER_TABLE.POSITION[1] + COLORPICKER_FILEDS_INDENT], COLORPICKER_PICKER_ALPHA_SIZE)) {
-                                var alpha_clamped = Math.clamp(input.cursor()[1],
+                            if (defines.in_bounds(INPUT_CURSOR_HELD, [COLORPICKER_TABLE.POSITION[0] + COLORPICKER_PICKER_COLOR_SIZE[0] + COLORPICKER_PICKER_HUE_SIZE[0] + COLORPICKER_FILEDS_INDENT * 3, COLORPICKER_TABLE.POSITION[1] + COLORPICKER_FILEDS_INDENT], COLORPICKER_PICKER_ALPHA_SIZE)) {
+                                var alpha_clamped = Math.clamp(INPUT_CURSOR[1],
                                     COLORPICKER_TABLE.POSITION[1] + COLORPICKER_FILEDS_INDENT,
                                     COLORPICKER_TABLE.POSITION[1] + COLORPICKER_FILEDS_INDENT + COLORPICKER_PICKER_ALPHA_SIZE[1])
 
@@ -2098,7 +2097,7 @@ menu.render = function () {
                         COLORPICKERS.push(COLORPICKER_TABLE)
                     }
 
-                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] = SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] + COLORPICKER_ITEM_INDENT * ITEM_ALPHA
+                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] += COLORPICKER_ITEM_INDENT * ITEM_ALPHA
                 } else if (objItem.type == 'button') {
 
                     var BUTTON_NAME_COLOR = defines.alpha_override(visuals.new_animation(id_n + 'button name', COLORS.BUTTON_NAME),
@@ -2134,8 +2133,8 @@ menu.render = function () {
                         BUTTON_NAME_COLOR,
                         BUTTON_NAME_FONT)
 
-                    if (defines.in_bounds(input.cursor(), ITEM_POSITION, BUTTON_BOX_SIZE) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
-                        if (input.pressed(0x01)) {
+                    if (defines.in_bounds(INPUT_CURSOR, ITEM_POSITION, BUTTON_BOX_SIZE) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
+                        if (INPUT_PRESSED_0X01) {
                             objItem.func()
                         }
                     } else {
@@ -2152,7 +2151,7 @@ menu.render = function () {
                         })
                     }
                     
-                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] = SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] + BUTTON_ITEM_INDENT * ITEM_ALPHA
+                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] += BUTTON_ITEM_INDENT * ITEM_ALPHA
                 } else if (objItem.type == 'keybind') {
 
                     var KEYBIND_NAME_COLOR = defines.alpha_override(visuals.new_animation(id_n + 'keybind name', COLORS.KEYBIND_NAME),
@@ -2203,8 +2202,8 @@ menu.render = function () {
                         objItem.is_visible = false
                     }
 
-                    if (defines.in_bounds(input.cursor(), ITEM_POSITION, [KEYBIND_PLACE_SIZE, KEYBIND_BOX_SIZE[1]]) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
-                        if (input.pressed(0x01)) {
+                    if (defines.in_bounds(INPUT_CURSOR, ITEM_POSITION, [KEYBIND_PLACE_SIZE, KEYBIND_BOX_SIZE[1]]) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
+                        if (INPUT_PRESSED_0X01) {
                             objItem.listening = true
                         }
                     } else {
@@ -2247,15 +2246,15 @@ menu.render = function () {
                             objItem.listening = false
                         }
 
-                        if (input.pressed(0x01)) {
-                            if (!defines.in_bounds(input.cursor(), [ITEM_POSITION[0] + KEYBIND_PLACE_SIZE - KEYBIND_BOUND_KEY_PREVIEW_SIZE[0] - KEYBIND_KEY_PREVIEW_INDENT * 2, ITEM_POSITION[1]], [KEYBIND_BOUND_KEY_PREVIEW_SIZE[0] + KEYBIND_KEY_PREVIEW_INDENT * 2, KEYBIND_BOX_SIZE[1]])) {
+                        if (INPUT_PRESSED_0X01) {
+                            if (!defines.in_bounds(INPUT_CURSOR, [ITEM_POSITION[0] + KEYBIND_PLACE_SIZE - KEYBIND_BOUND_KEY_PREVIEW_SIZE[0] - KEYBIND_KEY_PREVIEW_INDENT * 2, ITEM_POSITION[1]], [KEYBIND_BOUND_KEY_PREVIEW_SIZE[0] + KEYBIND_KEY_PREVIEW_INDENT * 2, KEYBIND_BOX_SIZE[1]])) {
                                 objItem.listening = false
                             }
                         }
                     }
 
                     if (input.pressed(0x02) && ITEM_INTERACTION_PERMISSION && !IS_SOMETHING_OPEN()) {
-                        if (defines.in_bounds(input.cursor(), [ITEM_POSITION[0] + KEYBIND_PLACE_SIZE - KEYBIND_BOUND_KEY_PREVIEW_SIZE[0] - KEYBIND_KEY_PREVIEW_INDENT * 2, ITEM_POSITION[1]], [KEYBIND_BOUND_KEY_PREVIEW_SIZE[0] + KEYBIND_KEY_PREVIEW_INDENT * 2, KEYBIND_BOX_SIZE[1]])) {
+                        if (defines.in_bounds(INPUT_CURSOR, [ITEM_POSITION[0] + KEYBIND_PLACE_SIZE - KEYBIND_BOUND_KEY_PREVIEW_SIZE[0] - KEYBIND_KEY_PREVIEW_INDENT * 2, ITEM_POSITION[1]], [KEYBIND_BOUND_KEY_PREVIEW_SIZE[0] + KEYBIND_KEY_PREVIEW_INDENT * 2, KEYBIND_BOX_SIZE[1]])) {
                             objItem.is_visible = true
                         }
                     }
@@ -2273,8 +2272,8 @@ menu.render = function () {
 
                         for (m in objItem.modes) {
 
-                            if (input.pressed(0x01) && ITEM_INTERACTION_PERMISSION && KEYBIND_ANIM) {
-                                if (defines.in_bounds(input.cursor(), [KEYBIND_MODE_WINDOW_TABLE.POSITION[0], KEYBIND_MODE_WINDOW_TABLE.POSITION[1] + OPTIONS_OFFSET], KEYBIND_MODE_WINDOW_SIZE)) {
+                            if (INPUT_PRESSED_0X01 && ITEM_INTERACTION_PERMISSION && KEYBIND_ANIM) {
+                                if (defines.in_bounds(INPUT_CURSOR, [KEYBIND_MODE_WINDOW_TABLE.POSITION[0], KEYBIND_MODE_WINDOW_TABLE.POSITION[1] + OPTIONS_OFFSET], KEYBIND_MODE_WINDOW_SIZE)) {
                                     objItem.value = false
                                     objItem.mode = m
                                     objItem.is_visible = false
@@ -2284,8 +2283,8 @@ menu.render = function () {
                             OPTIONS_OFFSET += KEYBIND_MODE_WINDOW_SIZE[1]
                         }
 
-                        if (input.pressed(0x01) && ITEM_INTERACTION_PERMISSION) {
-                            if (!defines.in_bounds(input.cursor(), [KEYBIND_MODE_WINDOW_TABLE.POSITION[0], KEYBIND_MODE_WINDOW_TABLE.POSITION[1] + OPTIONS_OFFSET], [KEYBIND_MODE_WINDOW_SIZE[0], KEYBIND_MODE_WINDOW_SIZE[1] * (objItem.modes.length + 1)])) {
+                        if (INPUT_PRESSED_0X01 && ITEM_INTERACTION_PERMISSION) {
+                            if (!defines.in_bounds(INPUT_CURSOR, [KEYBIND_MODE_WINDOW_TABLE.POSITION[0], KEYBIND_MODE_WINDOW_TABLE.POSITION[1] + OPTIONS_OFFSET], [KEYBIND_MODE_WINDOW_SIZE[0], KEYBIND_MODE_WINDOW_SIZE[1] * (objItem.modes.length + 1)])) {
                                 objItem.is_visible = false
                             }
                         }
@@ -2296,6 +2295,14 @@ menu.render = function () {
                     
                     SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] += KEYBIND_ITEM_INDENT * ITEM_ALPHA
                     
+                } else if (objItem.type == 'label') {
+
+                    var LABEL_COLOR = defines.alpha_override(visuals.new_animation(id_n + 'label color', COLORS.LABEL_COLOR),
+                        ITEM_ALPHA * SUBTAB_ALPHA * menu_alpha)
+                    
+                    render.String(ITEM_POSITION[0], ITEM_POSITION[1], 0, objItem.text, LABEL_COLOR, ITEM_NAME_FONT)
+
+                    SUBTAB_ITEMS_OFFSET[SUBTAB_NAME] += LABEL_ITEM_INDENT * ITEM_ALPHA
                 }
             }
             
@@ -2530,7 +2537,7 @@ menu.render = function () {
         var NAME_COLOR = defines.alpha_override(COLORS.HINT_ITEM_NAME, HINT.ANIM)
         var DESCRIPTION_COLOR = defines.alpha_override(COLORS.HINT_DESCRIPTION, HINT.ANIM)
 
-        var NAME = HINT.ITEM.name
+        var NAME = HINT.ITEM.name.trim()
         var HINT_ITEM = HINT.ITEM.hint
 
         var NAME_SIZE = render.TextSize(NAME, ITEM_NAME_FONT)
@@ -2626,7 +2633,7 @@ menu.handle_dpi_scale = function () {
 
 menu.subscribe('Settings', 'Menu', 'DPI Scale', menu.handle_dpi_scale)
 
-menu.add_dropdown('Settings', 'Menu', 'Color scheme', menu.colors.themes_table, 0, undefined, 'Changes menu color scheme', undefined, true)
+menu.add_dropdown('Settings', 'Menu', 'Color scheme', menu.colors.themes_table, 0, undefined, 'Changes menu color scheme', undefined, false)
 
 menu.color_scheme_cache = 'Default'
 
@@ -2644,6 +2651,9 @@ menu.subscribe('Settings', 'Menu', 'Color scheme', menu.handle_color_scheme)
 menu.add_dropdown('Settings', 'Configs', 'Config slot', ['Slot 1', 'Slot 2', 'Slot 3', 'Slot 4', 'Slot 5'], 0, undefined, 'Config slot selection', undefined, true)
 
 var configs = {}
+
+configs.save_label_timeout = 0
+configs.load_label_timeout = 0
 
 configs.extension = script.name
 
@@ -2707,6 +2717,8 @@ configs.save = function () {
     }
 
     DataFile.Save(current_name)
+
+    configs.save_label_timeout = Globals.Realtime() + 3
 }
 
 //сукааа уже обрадовался что все сделал, потом вспомнил что надо еще делать X-WAY конфиг
@@ -2816,10 +2828,20 @@ configs.load = function () {
             menu.set_value(current_element.tab, current_element.subtab, current_element.name, Number(string_value))
         }
     }
+
+    configs.load_label_timeout = Globals.Realtime() + 3
 }
 
 menu.add_button('Settings', 'Configs', 'Save config', configs.save, undefined, 'Loads config from selected slot')
 menu.add_button('Settings', 'Configs', 'Load config', configs.load, undefined, 'Saves current config as selected slot')
+
+menu.add_label('Settings', 'Configs', 'Config saved', function () {
+    return configs.save_label_timeout > Globals.Realtime()
+})
+
+menu.add_label('Settings', 'Configs', 'Config loaded', function () {
+    return configs.load_label_timeout > Globals.Realtime()
+})
 
 
 menu.add_subtab('Rage', 'Main')
@@ -2965,6 +2987,10 @@ rage.conditional_hitchance.new_condition('On key', function (key, flags, localpl
     return key
 })
 
+//menu.add_subtab('Rage', 'Exploits')
+
+//menu.add_checkbox('Rage', 'Exploits', 'Di')
+
 var anti_aims = {}
 
 menu.add_subtab('Anti Aim', 'Main')
@@ -2990,6 +3016,7 @@ anti_aims.packets_update = function () {
 
 anti_aims.current_state = 'unknown'
 
+anti_aims.enabled_path = ['Rage', 'Anti Aim', 'General', 'Enabled']
 anti_aims.yaw_path = ['Rage', 'Anti Aim', 'Directions', 'Yaw offset']
 anti_aims.inverter_path = ['Rage', 'Anti Aim', 'General', 'Key assignment', 'AA direction inverter']
 anti_aims.slow_walk_path = ['Rage', 'Anti Aim', 'General', 'Key assignment', 'Slow walk']
@@ -2999,10 +3026,6 @@ menu.add_checkbox('Anti Aim', 'Main', 'Edge yaw', false, function () {
 })
 
 menu.add_keybind('Anti Aim', 'Main', 'Key', function () {
-    return menu.get_value('Anti Aim', 'Main', 'Enable') && menu.get_value('Anti Aim', 'Main', 'Edge yaw')
-})
-
-menu.add_checkbox('Anti Aim', 'Main', 'Ignore yaw settings', false, function () {
     return menu.get_value('Anti Aim', 'Main', 'Enable') && menu.get_value('Anti Aim', 'Main', 'Edge yaw')
 })
 
@@ -3018,7 +3041,7 @@ menu.add_slider('Anti Aim', 'Main', 'Segments', 18, 10, 90, function () {
     return menu.get_value('Anti Aim', 'Main', 'Enable') && menu.get_value('Anti Aim', 'Main', 'Edge yaw') && menu.get_value('Anti Aim', 'Main', 'Additional settings')
 }, 'Scan segments. Recommended value is 18')
 
-menu.add_slider('Anti Aim', 'Main', 'Radius', 40, 10, 100, function () {
+menu.add_slider('Anti Aim', 'Main', 'Radius', 40, 20, 100, function () {
     return menu.get_value('Anti Aim', 'Main', 'Enable') && menu.get_value('Anti Aim', 'Main', 'Edge yaw') && menu.get_value('Anti Aim', 'Main', 'Additional settings')
 }, 'Scan radius. Recommended value is 40')
 
@@ -3029,8 +3052,6 @@ anti_aims.edge_yaw.yaw = 0
 
 anti_aims.edge_yaw.init = function () {
     var processed_points = []
-
-    var menu_ignore_yaw_settings = menu.get_value('Anti Aim', 'Main', 'Ignore yaw settings')
 
     var menu_additional_settings = menu.get_value('Anti Aim', 'Main', 'Additional settings')
     var menu_extrapolation = menu.get_value('Anti Aim', 'Main', 'Extrapolation')
@@ -3119,6 +3140,8 @@ anti_aims.edge_yaw.init = function () {
 
         anti_aims.edge_yaw.is_active = true
         anti_aims.edge_yaw.yaw = new_yaw
+
+        UI.SetValue(anti_aims.yaw_path, anti_aims.edge_yaw.yaw)
     }
 }
 
@@ -3146,7 +3169,7 @@ anti_aims.x_way.menu_elements = []
 
 anti_aims.x_way.add_way = function (name, show_condition) {
     if (!anti_aims.x_way.menu_elements[name]) {
-        Cheat.Print('КОДЕР ПИДАРАЗ ХУЕВО СДЕЛАЛ ПОПРОСИТЕ ПЕРЕДЕЛАТЬ \n')
+        Cheat.PrintLog('КОДЕР ПИДАРАЗ ХУЕВО СДЕЛАЛ ПОПРОСИТЕ ПЕРЕДЕЛАТЬ ОШИБКА 2', [255, 0, 0, 255])
         return
     }
 
@@ -3179,7 +3202,7 @@ anti_aims.x_way.add_way = function (name, show_condition) {
 
 anti_aims.x_way.remove_way = function (name) {
     if (!anti_aims.x_way.menu_elements[name]) {
-        Cheat.Print('КОДЕР ПИДАРАЗ ХУЕВО СДЕЛАЛ ПОПРОСИТЕ ПЕРЕДЕЛАТЬ \n')
+        Cheat.PrintLog('КОДЕР ПИДАРАЗ ХУЕВО СДЕЛАЛ ПОПРОСИТЕ ПЕРЕДЕЛАТЬ ОШИБКА 2', [255, 0, 0, 255])
         return
     }
 
@@ -3326,9 +3349,11 @@ anti_aims.new_condition = function (name, fn) {
 }
 
 anti_aims.yaw_value_cache = UI.GetValue(anti_aims.yaw_path)
+anti_aims.enabled_cache = UI.GetValue(anti_aims.enabled_path)
 
 anti_aims.reset_on_unload = function () {
     UI.SetValue(anti_aims.yaw_path, anti_aims.yaw_value_cache)
+    UI.SetValue(anti_aims.enabled_path, anti_aims.enabled_cache)
     AntiAim.SetOverride(0)
 }
 
@@ -3343,6 +3368,7 @@ anti_aims.apply_condition = function (name) {
         override = menu.get_value('Anti Aim', 'Main', 'Enable') && menu.get_value('Anti Aim', 'Builder', 'Override ' + name.toLowerCase())
     }
 
+    UI.SetValue(anti_aims.enabled_path, override ? 1 : 0)
     AntiAim.SetOverride(override ? 1 : 0)
 
     if (!override) {
@@ -3389,7 +3415,6 @@ anti_aims.apply_condition = function (name) {
         var static_limit = menu.get_value('Anti Aim', 'Builder', 'Static limit' + id_n)
 
         angle_to_override = static_limit
-
     } else if (fake_limit_type == 1) {
         var common_limit = menu.get_value('Anti Aim', 'Builder', 'Common limit' + id_n)
         var inverter = anti_aims.variables[name].inverter
@@ -3484,7 +3509,7 @@ anti_aims.apply_condition = function (name) {
         yaw_to_override += yaw_add
     }
 
-    var ignore_yaw_settings = menu.get_value('Anti Aim', 'Main', 'Ignore yaw settings')
+    /*var ignore_yaw_settings = menu.get_value('Anti Aim', 'Main', 'Ignore yaw settings')
     var edge_yaw = menu.get_value('Anti Aim', 'Main', 'Edge yaw')
 
     if (edge_yaw) {
@@ -3495,7 +3520,7 @@ anti_aims.apply_condition = function (name) {
                 yaw_to_override += anti_aims.edge_yaw.yaw
             }
         }
-    }
+    }*/
 
     UI.SetValue(anti_aims.yaw_path, yaw_to_override)
     AntiAim.SetRealOffset(angle_to_override)
@@ -3664,6 +3689,38 @@ menu.add_keybind('Anti Aim', 'Main', 'Key ', function () {
 
 var freestanding = {}
 */
+
+menu.add_checkbox('Anti Aim', 'Main', 'Disable AA on warmup', false, function () {
+    return menu.get_value('Anti Aim', 'Main', 'Enable')
+}, 'Disables anti aim on warmup to avoid getting resolved before match')
+
+anti_aims.warmup_aa = {}
+
+anti_aims.warmup_aa.handle = function () {
+
+    if (!menu.get_value('Anti Aim', 'Main', 'Enable')) {
+        return
+    }
+
+    if (!menu.get_value('Anti Aim', 'Main', 'Disable AA on warmup')) {
+        return
+    }
+
+    var gamerules = Entity.GetGameRulesProxy()
+    
+    if (gamerules == undefined) {
+        return
+    }
+
+    var is_warmup = Entity.GetProp(gamerules, 'CCSGameRulesProxy', 'm_bWarmupPeriod')
+
+    if (is_warmup) {
+        AntiAim.SetRealOffset(0)
+        AntiAim.SetOverride(0)
+
+        UI.SetValue(anti_aims.enabled_path, 0)
+    }
+}
 
 menu.add_subtab('Visuals', 'Main')
 
@@ -4032,11 +4089,11 @@ markers.on_screen.update_timer = function () {
 
     var hitgroup = Event.GetInt('hitgroup') 
 
-    if (!hitgroup) {
+    if (hitgroup == undefined) {
         return
     }
 
-    markers.on_screen.timer = Globals.Curtime() + markers.on_screen.time
+    markers.on_screen.timer = Globals.Realtime() + markers.on_screen.time
     markers.on_screen.headshot = hitgroup == 1
 }
 
@@ -4057,7 +4114,7 @@ markers.on_screen.render = function () {
         return
     }
 
-    var curtime = Globals.Curtime()
+    var curtime = Globals.Realtime()
 
     if (markers.on_screen.timer <= curtime) {
         return
@@ -4242,7 +4299,7 @@ markers.world.player_hurt = function () {
 
     var hitgroup = Event.GetInt('hitgroup') 
 
-    if (!hitgroup) {
+    if (hitgroup == undefined) {
         return
     }
 
@@ -4261,7 +4318,7 @@ markers.world.player_hurt = function () {
     var hitboxes = defines.hitboxes_by_hitgroup(hitgroup)
 
     if (hitboxes == undefined) {
-        hitboxes = [0]
+        hitboxes = [0, 3, 5] //по приколу прросто вдруг там хуй папам
     }
 
     var hit = undefined
@@ -4290,7 +4347,7 @@ markers.world.player_hurt = function () {
 
     markers.world.markers.push({
         vector : hit,
-        time : Globals.Curtime() + markers.world.marker_timer,
+        time : Globals.Realtime() + markers.world.marker_timer,
         alpha : 1
     })
 }
@@ -4334,7 +4391,7 @@ markers.world.render = function () {
     var indent = 3
     var length = 3
 
-    var curtime = Globals.Curtime()
+    var curtime = Globals.Realtime()
 
     for (i = 0; i < markers.world.markers.length; i++) {
         var marker = markers.world.markers[i]
@@ -4390,10 +4447,6 @@ markers.world.render = function () {
 menu.add_subtab('Misc', 'Main') 
 
 menu.add_checkbox('Misc', 'Main', 'Enable', false)
-
-menu.add_checkbox('Misc', 'Main', 'Smart kill/death say', false, function () {
-    return menu.get_value('Misc', 'Main', 'Enable')
-})
 
 menu.add_checkbox('Misc', 'Main', 'Hit sounds', false, function () {
     return menu.get_value('Misc', 'Main', 'Enable')
@@ -4489,7 +4542,7 @@ sounds.handle = function () {
 
     var hitgroup = Event.GetInt('hitgroup')
 
-    if (!hitgroup) {
+    if (hitgroup == undefined) {
         return
     }
     
@@ -4513,6 +4566,55 @@ sounds.handle = function () {
     
     Cheat.ExecuteCommand('play ' + current_sound_path)   
 }
+/*
+menu.add_checkbox('Misc', 'Main', 'Smart kill/death say', false, function () {
+    return menu.get_value('Misc', 'Main', 'Enable')
+})*/
+
+var trashtalk = {}
+
+trashtalk.init = function () {
+    if (!menu.get_value('Misc', 'Main', 'Enable')) {
+        return
+    }
+
+    if (!menu.get_value('Misc', 'Main', 'Smart kill/death say')) {
+        return
+    }
+
+    var localplayer = Entity.GetLocalPlayer()
+
+    if (!localplayer) {
+        return
+    }
+
+    var userid = Event.GetInt('userid')
+
+    if (!userid) {
+        return
+    }
+
+    var player = Entity.GetEntityFromUserID(userid)
+
+    if (!player) {
+        return
+    }
+
+    var attacker = Event.GetInt('attacker')
+    
+    if (!attacker) {
+        return
+    }
+
+    var attacker = Entity.GetEntityFromUserID(attacker)
+
+    if (!attacker) {
+        return
+    }
+
+    var tags = []
+}
+
 
 Cheat.RegisterCallback('Unload', 'anti_aims.reset_on_unload')
 
@@ -4522,11 +4624,13 @@ Cheat.RegisterCallback('bullet_impact', 'markers.world.bullet_impact')
 Cheat.RegisterCallback('player_hurt', 'markers.world.player_hurt')
 Cheat.RegisterCallback('round_start', 'markers.world.round_start')
 
-Cheat.RegisterCallback('CreateMove', 'anti_aims.edge_yaw.handle')
 Cheat.RegisterCallback('CreateMove', 'anti_aims.update_conditions')
+Cheat.RegisterCallback('CreateMove', 'anti_aims.edge_yaw.handle')
 Cheat.RegisterCallback('CreateMove', 'rage.conditional_hitchance.update_conditions')
 Cheat.RegisterCallback('CreateMove', 'anti_aims.packets_update')
 Cheat.RegisterCallback('CreateMove', 'anti_aims.update_player_condition')
+
+Cheat.RegisterCallback('CreateMove', 'anti_aims.warmup_aa.handle')
 
 Cheat.RegisterCallback('Draw', 'visuals.start_render')
 
